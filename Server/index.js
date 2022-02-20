@@ -4,8 +4,10 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const authenticate = require('./middleware/authentication');
 const app = express();
+const cors = require('cors')
 const port = process.env.PORT || 5000;
 app.use(express.json());
+app.use(cors())
 
 require('./db/conn');
 const User = require('./models/User');
@@ -43,6 +45,8 @@ app.post("/signup", async (req, res) => {
 
 // Login
 app.post("/login", async (req, res) => {
+    console.log("ok");
+    console.log(req.body.email);
     try {
         const findUser = await User.findOne({ email: req.body.email });
         if (!findUser) {

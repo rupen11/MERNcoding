@@ -1,0 +1,33 @@
+.maincontent{
+    height: 90vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.maincontent button{
+    background-color: black;
+    font-size: x-large;
+    color: rgb(156, 146, 146);
+    border-radius: 1vmax;
+    border: 2px solid rgb(100, 97, 97);
+    padding: 1vmax;
+    transition: 1s;
+    cursor: pointer;
+}
+
+.maincontent button:hover{
+    background-color: black;
+    transform: rotateX('50');
+    font-size: x-large;
+    color: white;
+    border-radius: 1vmax;
+    border: 2px solid rgb(0, 0, 0);
+    padding: 1vmax;
+    cursor: pointer;
+}
+
+.icon {
+    margin-right: 1vmax;
+}
