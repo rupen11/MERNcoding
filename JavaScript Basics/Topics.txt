@@ -1,5 +1,0 @@
-Async Await
-Object Destructuring
-Array Destructuring
-get post put delete request
-node basics

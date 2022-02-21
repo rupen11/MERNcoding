@@ -4,7 +4,6 @@ import { Link, useHistory } from 'react-router-dom'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 
-
 const Login = () => {
   const history = useHistory();
   const token = localStorage.getItem("Token");

@@ -8,7 +8,6 @@ const authentication = (req, res, next) => {
         }
         const data = jwt.verify(token, process.env.JWT_SECUREKEY);
         req.userId = data.user.id;
-        console.log(req.userId);
         next();
     }
     catch (error) {

@@ -11,7 +11,7 @@ app.use(cors())
 
 require('./db/conn');
 const User = require('./models/User');
-const Food = require('./models/Food');
+const Note = require('./models/Note');
 
 // Signup
 app.post("/signup", async (req, res) => {
@@ -83,63 +83,135 @@ app.get("/getuser", authenticate, async (req, res) => {
     }
 })
 
-// Add Food
-app.post("/addfood", authenticate, async (req, res) => {
-    const { foodname, foodimage, hotelname, foodprice } = req.body;
+// // Add Food
+// app.post("/addfood", authenticate, async (req, res) => {
+//     const { foodname, foodimage, hotelname, foodprice } = req.body;
+//     try {
+//         const createFoodData = new Food({ foodname, foodimage, hotelname, foodprice, user: req.userId });
+
+//         const saveFood = await createFoodData.save();
+
+//         if (!saveFood) return res.status(400).json("Food Not Saved");
+
+//         return res.status(200).json("Food Saved");
+//     } catch (error) {
+//         return res.status(400).json("Some error to add food " + error);
+//     }
+// })
+
+// // Update Food
+// app.put("/updatefood/:id", authenticate, async (req, res) => {
+//     const { foodname, foodimage, hotelname, foodprice } = req.body;
+//     try {
+//         let updateNoteObj = {};
+//         if (foodname) updateNoteObj.foodname = foodname;
+//         if (foodimage) updateNoteObj.foodimage = foodimage;
+//         if (hotelname) updateNoteObj.hotelname = hotelname;
+//         if (foodprice) updateNoteObj.foodprice = foodprice;
+//         if (Object.keys(updateNoteObj).length === 0) return res.status(400).json("Please Enter Updated Values");
+
+//         const findFood = await Food.findById(req.params.id);
+//         if (!findFood) return res.status(400).json("Food Detail Not Find");
+
+//         if (findFood.user.toString() !== req.userId.toString()) return res.status(400).json("Access Denied for update food");
+
+//         const updateFood = await Food.findByIdAndUpdate(req.params.id, { $set: updateNoteObj }, { new: true });
+//         if (!updateFood) return res.status(400).json("Food Not Udpated");
+//         return res.status(200).json("Food Udpated");
+//     }
+//     catch (error) {
+//         return res.status(400).json("Some error to update food " + error);
+//     }
+// })
+
+// // Delete food
+// app.delete("/deletefood/:id", authenticate, async (req, res) => {
+//     try {
+//         const findFood = await Food.findById(req.params.id);
+//         if (!findFood) return res.status(400).json("Food Detail Not Find");
+
+//         if (req.userId.toString() !== findFood.user.toString()) return res.status(400).json("Access Denied for delete food");
+
+//         const deleteFood = await Food.findByIdAndDelete(req.params.id);
+//         if (!deleteFood) return res.status(400).json("Food Not Deleted");
+//         return res.status(200).json("Food Deleted");
+
+//     }
+//     catch (error) {
+//         return res.status(400).json("Some error to delete food " + error);
+
+//     }
+// })
+
+// Add Note
+app.post("/addnote", authenticate, async (req, res) => {
+    console.log(req.body);
+    const { title, subtitle, description } = req.body;
     try {
-        const createFoodData = new Food({ foodname, foodimage, hotelname, foodprice, user: req.userId });
+        const createFoodData = new Note({ title, subtitle, description, user: req.userId });
 
         const saveFood = await createFoodData.save();
 
-        if (!saveFood) return res.status(400).json("Food Not Saved");
+        if (!saveFood) return res.status(400).json("Note Not Saved");
 
-        return res.status(200).json("Food Saved");
+        return res.status(200).json("Note Saved");
     } catch (error) {
-        return res.status(400).json("Some error to add food " + error);
+        return res.status(400).json("Some error to add Note " + error);
     }
 })
 
-// Update Food
-app.put("/updatefood/:id", authenticate, async (req, res) => {
-    const { foodname, foodimage, hotelname, foodprice } = req.body;
+// Update Note
+app.put("/updatenote/:id", authenticate, async (req, res) => {
+    const { title, subtitle, description } = req.body;
     try {
-        let updateFoodObj = {};
-        if (foodname) updateFoodObj.foodname = foodname;
-        if (foodimage) updateFoodObj.foodimage = foodimage;
-        if (hotelname) updateFoodObj.hotelname = hotelname;
-        if (foodprice) updateFoodObj.foodprice = foodprice;
-        if (Object.keys(updateFoodObj).length === 0) return res.status(400).json("Please Enter Updated Values");
+        let updateNoteObj = {};
+        if (title) updateNoteObj.title = title;
+        if (subtitle) updateNoteObj.subtitle = subtitle;
+        if (description) updateNoteObj.description = description;
+        if (Object.keys(updateNoteObj).length === 0) return res.status(400).json("Please Enter Updated Values");
 
-        const findFood = await Food.findById(req.params.id);
-        if (!findFood) return res.status(400).json("Food Detail Not Find");
+        const findFood = await Note.findById(req.params.id);
+        if (!findFood) return res.status(400).json("Note Detail Not Find");
 
-        if (findFood.user.toString() !== req.userId.toString()) return res.status(400).json("Access Denied for update food");
+        if (findFood.user.toString() !== req.userId.toString()) return res.status(400).json("Access Denied for update Note");
 
-        const updateFood = await Food.findByIdAndUpdate(req.params.id, { $set: updateFoodObj }, { new: true });
-        if (!updateFood) return res.status(400).json("Food Not Udpated");
-        return res.status(200).json("Food Udpated");
+        const updateFood = await Note.findByIdAndUpdate(req.params.id, { $set: updateNoteObj }, { new: true });
+        if (!updateFood) return res.status(400).json("Note Not Udpated");
+        return res.status(200).json("Note Udpated");
     }
     catch (error) {
-        return res.status(400).json("Some error to update food " + error);
+        return res.status(400).json("Some error to update Note " + error);
     }
 })
 
-// Delete food
-app.delete("/deletefood/:id", authenticate, async (req, res) => {
+// Delete Note
+app.delete("/deletenote/:id", authenticate, async (req, res) => {
     try {
-        const findFood = await Food.findById(req.params.id);
-        if (!findFood) return res.status(400).json("Food Detail Not Find");
+        const findFood = await Note.findById(req.params.id);
+        if (!findFood) return res.status(400).json("Note Detail Not Find");
 
-        if (req.userId.toString() !== findFood.user.toString()) return res.status(400).json("Access Denied for delete food");
+        if (req.userId.toString() !== findFood.user.toString()) return res.status(400).json("Access Denied for delete Note");
 
-        const deleteFood = await Food.findByIdAndDelete(req.params.id);
-        if (!deleteFood) return res.status(400).json("Food Not Deleted");
-        return res.status(200).json("Food Deleted");
+        const deleteFood = await Note.findByIdAndDelete(req.params.id);
+        if (!deleteFood) return res.status(400).json("Note Not Deleted");
+        return res.status(200).json("Note Deleted");
 
     }
     catch (error) {
-        return res.status(400).json("Some error to delete food " + error);
+        return res.status(400).json("Some error to delete Note " + error);
 
+    }
+})
+
+// Get note
+app.get("/getnote", authenticate, async (req, res) => {
+    try {
+        const findNote = await Note.find({ user: req.userId });
+        if (!findNote) return res.status(400).json("Notes Not Find");
+        return res.status(200).json(findNote);
+    }
+    catch (error) {
+        return res.status(400).json("Some error to get Note " + error);
     }
 })
 
