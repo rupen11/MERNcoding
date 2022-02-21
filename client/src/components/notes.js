@@ -4,6 +4,7 @@ import { Button, Card, Modal } from 'react-bootstrap'
 import { FaEdit, FaTrashAlt, FaCopy } from 'react-icons/fa'
 import { useHistory } from 'react-router-dom'
 import Swal from 'sweetalert2'
+import { FaPlus } from 'react-icons/fa'
 
 const Notes = () => {
     const history = useHistory();
@@ -14,8 +15,12 @@ const Notes = () => {
 
     // Model
     const [show, setShow] = useState(false);
+    const [modelState, setModelState] = useState("");
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleShow = (val) => {
+        setModelState(val);
+        setShow(true);
+    }
 
     const [newNote, setNewNote] = useState({ title: "", subtitle: "", description: "" });
     const [note, setNote] = useState([]);
@@ -73,7 +78,7 @@ const Notes = () => {
     // Update Note
     const openUpdateModel = (id, title, subtitle, description) => {
         setUpdateModelValue({ id, title, subtitle, description });
-        handleShow();
+        handleShow("update");
     }
 
     const handleUpdate = (e) => {
@@ -152,21 +157,10 @@ const Notes = () => {
 
     return (
         <>
-            <br />
-            <form onSubmit={handleNoteSubmit}>
-                <input type="text" name="title" value={newNote.title} onChange={handleNote} />
-                <br />
-                <br />
-                <input type="text" name="subtitle" value={newNote.subtitle} onChange={handleNote} />
-                <br />
-                <br />
-                <input type="text" name="description" value={newNote.description} onChange={handleNote} />
-                <br />
-                <br />
-                <button type="submit">Add Note</button>
-                <br />
-                <br />
-            </form>
+
+            <div>
+                <button type="button" onClick={() => { handleShow("add") }} ><FaPlus className='icon' />Add Note</button>
+            </div>
 
             <div className='rowcard'>
                 {
@@ -190,24 +184,48 @@ const Notes = () => {
             </div>
 
             {/* Model */}
-            <Button variant="primary" onClick={handleShow} style={{ display: 'none' }}>
+            <Button variant="primary" onClick={() => { handleShow("update") }} style={{ display: 'none' }}>
                 Launch demo modal
             </Button>
 
-            <Modal show={show} onHide={handleClose}>
+            {modelState === "add" ? <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
+                    <Modal.Title>Add Note</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <form >
-                        <input type="text" name="title" value={updateModelValue.title} onChange={handleUpdate} />
+                    <form>
+                        <input type="text" name="title" value={newNote.title} onChange={handleNote} />
                         <br />
                         <br />
-                        <input type="text" name="subtitle" value={updateModelValue.subtitle} onChange={handleUpdate} />
+                        <input type="text" name="subtitle" value={newNote.subtitle} onChange={handleNote} />
                         <br />
                         <br />
-                        <input type="text" name="description" value={updateModelValue.description} onChange={handleUpdate} />
+                        <input type="text" name="description" value={newNote.description} onChange={handleNote} />
+                        <br />
+                        <br />
                     </form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant="primary" type="submit" onClick={handleNoteSubmit}>
+                        Add
+                    </Button>
+                </Modal.Footer>
+            </Modal> : <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Update Note</Modal.Title>
+                </Modal.Header>
+                <Modal.Body> <form >
+                    <input type="text" name="title" value={updateModelValue.title} onChange={handleUpdate} />
+                    <br />
+                    <br />
+                    <input type="text" name="subtitle" value={updateModelValue.subtitle} onChange={handleUpdate} />
+                    <br />
+                    <br />
+                    <input type="text" name="description" value={updateModelValue.description} onChange={handleUpdate} />
+                </form>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
@@ -217,7 +235,9 @@ const Notes = () => {
                         Update
                     </Button>
                 </Modal.Footer>
-            </Modal>
+            </Modal>}
+
+
         </>
     )
 }
