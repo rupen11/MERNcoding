@@ -114,6 +114,36 @@ const Notes = () => {
     }
 
     // Delete Note
+    const deleteFire = async (id) => {
+        try {
+            const res = await fetch("http://localhost:5000/deletenote/" + id, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "AuthToken": token
+                }
+            });
+            const json = await res.json();
+            if (res.status === 200) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Yeyy',
+                    text: json
+                })
+                getNotes();
+            }
+            else {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Yeyy',
+                    text: json
+                })
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
 
     useEffect(() => {
         getNotes();
@@ -140,20 +170,22 @@ const Notes = () => {
 
             <div className='rowcard'>
                 {
-                    note.map((note) => {
-                        return <Card className='my-5 mx-4 text-light' bg='dark' style={{ width: '20rem', height: '12.5rem' }} key={note._id}>
-                            <Card.Body>
-                                <Card.Title>{note.title}</Card.Title>
-                                <Card.Subtitle className="mb-2 text-muted">{note.subtitle}</Card.Subtitle>
-                                <Card.Text>
-                                    {note.description}
-                                </Card.Text>
-                                <Card.Link onClick={() => { openUpdateModel(note._id, note.title, note.subtitle, note.description) }}><FaEdit /></Card.Link>
-                                <Card.Link><FaTrashAlt /></Card.Link>
-                                <Card.Link><FaCopy /></Card.Link>
-                            </Card.Body>
-                        </Card>
-                    })
+                    note.length !== 0 ?
+                        note.map((note) => {
+                            return <Card className='my-5 mx-4 text-light' bg='dark' style={{ width: '20rem', height: '12.5rem' }} key={note._id}>
+                                <Card.Body>
+                                    <Card.Title>{note.title}</Card.Title>
+                                    <Card.Subtitle className="mb-2 text-muted">{note.subtitle}</Card.Subtitle>
+                                    <Card.Text>
+                                        {note.description}
+                                    </Card.Text>
+                                    <Card.Link onClick={() => { openUpdateModel(note._id, note.title, note.subtitle, note.description) }}><FaEdit /></Card.Link>
+                                    <Card.Link onClick={() => { deleteFire(note._id) }}><FaTrashAlt /></Card.Link>
+                                    <Card.Link><FaCopy /></Card.Link>
+                                </Card.Body>
+                            </Card>
+                        }) :
+                        <p>No Notes Added</p>
                 }
             </div>
 
